@@ -1,6 +1,7 @@
 EXEC = \
     tests/test-matrix \
-    tests/test-stopwatch
+    tests/test-stopwatch \
+
 
 GIT_HOOKS := .git/hooks/applied
 OUT ?= .build
@@ -14,7 +15,7 @@ $(GIT_HOOKS):
 CC ?= gcc
 CFLAGS = -Wall -std=gnu99 -g -O2 -I.
 LDFLAGS = -lpthread
-
+SRCS_common = main.c
 OBJS := \
 	stopwatch.o \
 	matrix_naive.o
@@ -25,6 +26,9 @@ deps := $(addprefix $(OUT)/,$(deps))
 
 tests/test-%: $(OBJS) tests/test-%.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+matrix_naive: $(SRCS_common) matrix_naive.c stopwatch.c
+	$(CC) $(CFLAGS)  -o $(OUT)/$@ main.c $@.c stopwatch.c
 
 $(OUT)/%.o: %.c $(OUT)
 	$(CC) $(CFLAGS) -c -o $@ -MMD -MF $@.d $<

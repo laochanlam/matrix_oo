@@ -15,5 +15,6 @@ int main()
     }
     double now = Stopwatch.read(ctx);
     Stopwatch.destroy(ctx);
+    printf("\n%f",now);
     return !now;
 }
