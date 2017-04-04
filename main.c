@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <assert.h>
 MatrixAlgo *matrix_providers[] = {
     &NaiveMatrixProvider,
 };
@@ -23,13 +23,13 @@ int main()
     int col_n = 512;
 
     /* Using dynamic allocation */
-    float **data1 = (float **)malloc(row_m * sizeof(float *));
-    float *data_ptr = (float *)malloc(col_m * row_m * sizeof(float));
+    float **data1 = (float **) malloc(row_m * sizeof(float *));
+    float *data_ptr = (float *) malloc(col_m * row_m * sizeof(float));
     for (int i = 0; i < row_m; i++, data_ptr += col_m)
         data1[i] = data_ptr;
 
-    float **data2 = (float **)malloc(row_n * sizeof(float *));
-    data_ptr = (float *)malloc(col_n * row_m * sizeof(float));
+    float **data2 = (float **) malloc(row_n * sizeof(float *));
+    data_ptr = (float *) malloc(col_n * row_m * sizeof(float));
     for (int i = 0; i < row_n; i++, data_ptr += col_n)
         data2[i] = data_ptr;
 
@@ -41,8 +41,8 @@ int main()
         for (int j = 0; j < col_n; j++)
             data2[i][j] = 1.0  + (rand() / ( RAND_MAX / (20.0-1.0) ) );
 
-    algo->assign(&m, data1, row_m, col_m);
-    algo->assign(&n, data2, row_m, col_m);
+    assert(algo->assign(&m, data1, row_m, col_m) && "Failed to Assign");
+    assert(algo->assign(&n, data2, row_m, col_m) && "Failed to Assign");
 
 
     Stopwatch.start(ctx);

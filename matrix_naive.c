@@ -5,7 +5,7 @@
 #define PRIV(x) \
     ((float **) ((x)->priv))
 
-static void init(Matrix *mat, const int row, const int col)
+static bool init(Matrix *mat, const int row, const int col)
 {
     mat->priv = (float **)malloc(row * sizeof(float *));
     float *data_ptr = (float *)malloc(col * row * sizeof(float));
@@ -13,14 +13,18 @@ static void init(Matrix *mat, const int row, const int col)
         mat->priv[i] = data_ptr;
     mat->row = row;
     mat->col = col;
+
+    if (!mat) return false;
+    return true;
 }
 
-static void assign(Matrix *thiz, float** data, int row, int col)
+static bool assign(Matrix *thiz, float** data, int row, int col)
 {
-    init(thiz, row, col);
+    if ( !init(thiz, row, col) ) return false;
     for (int i = 0; i < row; i++)
         for (int j = 0; j < col; j++)
             PRIV(thiz)[i][j] = data[i][j];
+    return true;
 }
 
 static const float epsilon = 1 / 10000.0;
@@ -38,7 +42,7 @@ static bool equal(const Matrix *l, const Matrix *r)
 bool mul(Matrix *dst, const Matrix *l, const Matrix *r)
 {
     assert( l->col == r->row && "These 2 matrix cannot be multiplied!");
-    init(dst,l->row,r->col);
+    if ( !init(dst,l->row,r->col) ) return false;
 
     for (int i = 0; i < l->row; i++)
         for (int j = 0; j < r->col; j++)

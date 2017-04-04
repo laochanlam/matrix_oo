@@ -9,10 +9,10 @@ typedef struct {
 } Matrix;
 
 typedef struct {
-    void (*assign)(Matrix *thiz, float** data, int row, int col);
+    bool (*assign)(Matrix *thiz, float** data, int row, int col);
     bool (*equal)(const Matrix *l, const Matrix *r);
     bool (*mul)(Matrix *dst, const Matrix *l, const Matrix *r);
-    void (*init)(Matrix *mat, const int row, const int col);
+    bool (*init)(Matrix *mat, const int row, const int col);
 } MatrixAlgo;
 
 /* Available matrix providers */

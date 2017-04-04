@@ -30,6 +30,9 @@ tests/test-%: $(OBJS) tests/test-%.c
 matrix_naive: $(SRCS_common) matrix_naive.c stopwatch.c
 	$(CC) $(CFLAGS)  -o $(OUT)/$@ main.c $@.c stopwatch.c
 
+matrix_sse: $(SRCS_common) matrix_sse.c stopwatch.c
+	$(CC) $(CFLAGS)  -o $(OUT)/$@ main.c $@.c stopwatch.c
+
 $(OUT)/%.o: %.c $(OUT)
 	$(CC) $(CFLAGS) -c -o $@ -MMD -MF $@.d $<
 
